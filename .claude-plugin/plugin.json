@@ -1,0 +1,41 @@
+{
+  "name": "twg",
+  "version": "0.1.0",
+  "author": {
+    "name": "Atlassian"
+  },
+  "description": "Query and manage Atlassian Teamwork Graph data using the local twg CLI (no MCP).",
+  "userConfig": {
+    "atlassian_email": {
+      "title": "Atlassian Email",
+      "type": "string",
+      "description": "Your Atlassian account email (e.g. you@company.com)",
+      "sensitive": false
+    },
+    "atlassian_token": {
+      "title": "Atlassian API Token",
+      "type": "string",
+      "description": "Atlassian API token — generate at https://id.atlassian.com/manage-profile/security/api-tokens",
+      "sensitive": true
+    },
+    "atlassian_site": {
+      "title": "Atlassian Site",
+      "type": "string",
+      "description": "Your Atlassian site prefix (e.g. 'hello' for hello.atlassian.net)",
+      "sensitive": false
+    },
+    "bitbucket_token": {
+      "title": "Bitbucket Token (optional)",
+      "type": "string",
+      "description": "Bitbucket token for bb/PR commands — generate at https://id.atlassian.com/manage-profile/security/api-tokens?autofillToken=&appId=bitbucket&selectedScopes=all&expiryDays=30",
+      "sensitive": true
+    },
+    "rovo_mcp_token": {
+      "title": "Rovo MCP Token (optional)",
+      "type": "string",
+      "description": "Rovo MCP token for twg rovo search — generate at https://id.atlassian.com/manage-profile/security/api-tokens?autofillToken=&appId=mcp&selectedScopes=all&expiryDays=30",
+      "sensitive": true
+    }
+  },
+  "skills": "./skills"
+}

@@ -1,0 +1,18 @@
+{
+  "name": "atlassian-plugins",
+  "owner": {
+    "name": "Atlassian",
+    "email": "pathivarapu@atlassian.com"
+  },
+  "metadata": {
+    "description": "Atlassian plugins for Cowork"
+  },
+  "plugins": [
+    {
+      "name": "twg",
+      "source": "./",
+      "description": "Query and manage Atlassian Teamwork Graph data using the local twg CLI",
+      "homepage": "https://teamwork-graph.atlassian.com"
+    }
+  ]
+}
