@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+resolve_twg() {
+  printf '%s\n' "${HOME}/.local/bin/twg"
+  return 0
+}
+
+main() {
+  local twg_bin
+  twg_bin="$(resolve_twg)" || exit $?
+
+  # Tag all invocations from this skill wrapper so analytics can segment traffic by source.
+  export TWG_METRICS_SOURCE="agent-skill"
+
+  local has_output=0
+  local output_is_json=0
+  local wants_help=0
+  local -a cmd args
+  cmd=("${twg_bin}" "--mode" "agent")
+  args=("$@")
+
+  if [ "$#" -eq 0 ]; then
+    wants_help=1
+    cmd+=("--help")
+  else
+    local i arg next_arg
+    for ((i = 0; i < ${#args[@]}; i++)); do
+      arg="${args[i]}"
+      case "${arg}" in
+        -o|--output)
+          has_output=1
+          next_arg="${args[i+1]:-}"
+          if [ -z "${next_arg}" ] || [[ "${next_arg}" == -* ]] || [[ -z "${next_arg//[[:space:]]/}" ]]; then
+            echo "Error: ${arg} requires a value." >&2
+            exit 2
+          fi
+          if [ "${next_arg}" = "json" ]; then
+            output_is_json=1
+          fi
+          ;;
+        --output=*)
+          has_output=1
+          next_arg="${arg#--output=}"
+          if [ -z "${next_arg}" ] || [[ -z "${next_arg//[[:space:]]/}" ]]; then
+            echo "Error: --output requires a value." >&2
+            exit 2
+          fi
+          if [ "${next_arg}" = "json" ]; then
+            output_is_json=1
+          fi
+          ;;
+        -h|--help|help)
+          wants_help=1
+          ;;
+      esac
+    done
+
+    cmd+=("$@")
+
+    if [ "${wants_help}" -eq 0 ] && [ "${has_output}" -eq 0 ]; then
+      cmd+=("--output" "json")
+      output_is_json=1
+    fi
+  fi
+
+  if [ "${wants_help}" -eq 1 ]; then
+    exec "${cmd[@]}"
+  fi
+
+  local temp_dir temp_root stdout_file stderr_file status stdout_name epoch_seconds
+  epoch_seconds="$(date +%s)"
+  temp_root="/tmp/twg/${epoch_seconds}"
+  mkdir -p "${temp_root}"
+  temp_dir="$(mktemp -d "${temp_root}/run.XXXXXX")"
+  stdout_name="stdout"
+  if [ "${output_is_json}" -eq 1 ]; then
+    stdout_name="stdout.json"
+  fi
+  stdout_file="${temp_dir}/${stdout_name}"
+  stderr_file="${temp_dir}/stderr"
+
+  set +e
+  "${cmd[@]}" >"${stdout_file}" 2>"${stderr_file}"
+  status=$?
+  set -e
+
+  if [ -s "${stdout_file}" ]; then
+    printf 'stdout=%s\n' "${stdout_file}"
+  fi
+  if [ -s "${stderr_file}" ]; then
+    printf 'stderr=%s\n' "${stderr_file}"
+  fi
+
+  exit "${status}"
+}
+
+main "$@"

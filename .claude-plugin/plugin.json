@@ -1,10 +1,11 @@
 {
-  "name": "twg",
+  "name": "twg-skills",
   "version": "0.1.0",
   "author": {
-    "name": "Atlassian"
+    "name": "Atlassian",
+    "email": "help@atlassian.com"
   },
-  "description": "Query and manage Atlassian Teamwork Graph data using the local twg CLI (no MCP).",
+  "description": "Agent skills for querying and managing Atlassian Teamwork Graph data using the twg cli",
   "userConfig": {
     "atlassian_email": {
       "title": "Atlassian Email",
@@ -37,5 +38,5 @@
       "sensitive": true
     }
   },
-  "skills": "./skills"
+  "skills": "./config/skills"
 }
