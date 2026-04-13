@@ -10,10 +10,10 @@ description: >
 ## Check whether setup is needed
 
 ```bash
-twg --version 2>/dev/null && ls ~/.claude/skills/twg/SKILL.md 2>/dev/null && echo "ready" || echo "setup needed"
+twg doctor 2>/dev/null && ls ~/.claude/skills/twg/SKILL.md 2>/dev/null && echo "ready" || echo "setup needed"
 ```
 
-If already ready, tell the user to start a new session to load the full TWG skill.
+If already ready, tell the user to just start using the twg skill
 
 ## Steps (run once)
 
@@ -30,21 +30,20 @@ fi
 
 ### 2. Authenticate
 
+Read the .env file in the attached work folder and temporarily load the data into TWG_USER, TWG_TOKEN, TWG_SITE
 ```bash
-TWG_USER="${CLAUDE_PLUGIN_OPTION_ATLASSIAN_EMAIL}" \
-TWG_TOKEN="${CLAUDE_PLUGIN_OPTION_ATLASSIAN_TOKEN}" \
-TWG_SITE="${CLAUDE_PLUGIN_OPTION_ATLASSIAN_SITE}" \
-TWG_BBC_TOKEN="${CLAUDE_PLUGIN_OPTION_BITBUCKET_TOKEN}" \
-TWG_MCP_TOKEN="${CLAUDE_PLUGIN_OPTION_ROVO_MCP_TOKEN}" \
+TWG_USER="${TWG_USER}"
+TWG_TOKEN="${TWG_TOKEN}" \
+TWG_SITE="${TWG_SITE}" \
   twg login
 ```
 
 ### 3. Install the full skill
 
 ```bash
-twg skills install --target claude
+twg skills install --target claude --yes
 ```
 
 ### 4. Done
 
-Tell the user setup is complete and to start a new session to load the full TWG skill.
+Tell the user setup is complete and they can now start using twg skills

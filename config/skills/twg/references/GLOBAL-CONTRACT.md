@@ -28,10 +28,4 @@ scripts/twg <surface> <resource> --help
 
 ## Large outputs
 
-For very large goal exports, prefer SQLite:
-
-```bash
-scripts/twg goals --scope org --account-id <id> \
-  --include-parent-goal --include-contributing-projects \
-  --sqlite-file /tmp/goals.db
-```
+For very large goal exports, prefer `--sqlite-file` (see NATIVE-SURFACES.md for full example).

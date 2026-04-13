@@ -34,7 +34,7 @@ Resolve `scripts/twg` relative to the skill directory, as described in `../SKILL
 
 **Note:** Most commands that target a specific Atlassian site accept `--site <hostname>`. Omitted below for brevity.
 
-### Bitbucket (22 commands)
+### Bitbucket (23 commands)
 
 ```
 twg bb branch create
@@ -49,33 +49,49 @@ twg bb prs create
 twg bb prs decline
 twg bb prs get --workspace <ws> --repo <repo>
 twg bb prs merge
-twg bb prs query --workspace <ws> --repo <repo>
+twg bb prs query --workspace <ws> --repo <repo> --scope <repo|me> --role <author|reviewer> --reviewer <nickname-or-account-id> --state <OPEN|MERGED|DECLINED>
 twg bb prs remove-request-changes
 twg bb prs request-changes
 twg bb prs task create
 twg bb prs unapprove
 twg bb prs update
+twg bb repo contributors
 twg bb repo get
 twg bb repo query --workspace <ws>
 twg bb workspace get --workspace <ws>
 twg bb workspace member query
 ```
 
-### Confluence (25 commands)
+### Confluence (44 commands)
 
 ```
 twg confluence blog create --space-id <spaceId>
 twg confluence blog delete
 twg confluence blog get
 twg confluence blog query --scope <scope> --space-id <spaceId>
+twg confluence blog restrict
+twg confluence blog restrictions
+twg confluence blog unrestrict
 twg confluence blog update
 twg confluence database create --space-id <spaceId>
 twg confluence database delete
 twg confluence database get
 twg confluence database query --space-id <spaceId>
+twg confluence database restrict
+twg confluence database restrictions
+twg confluence database unrestrict
+twg confluence folder create
+twg confluence folder delete
+twg confluence folder get
+twg confluence folder restrict
+twg confluence folder restrictions
+twg confluence folder unrestrict
 twg confluence page create --space <key> --title <title> --body <text>
 twg confluence page get --body-format <adf|storage>
 twg confluence page move --space-key <spaceKey>
+twg confluence page restrict
+twg confluence page restrictions
+twg confluence page unrestrict
 twg confluence page update --title <title> --body <text>
 twg confluence search query --cql <query>
 twg confluence space archive
@@ -85,10 +101,14 @@ twg confluence space get
 twg confluence space query --keys <keys>
 twg confluence space unarchive
 twg confluence space update
+twg confluence tree
 twg confluence whiteboard create --space-id <spaceId>
 twg confluence whiteboard delete
 twg confluence whiteboard get
 twg confluence whiteboard query --space-id <spaceId>
+twg confluence whiteboard restrict
+twg confluence whiteboard restrictions
+twg confluence whiteboard unrestrict
 ```
 
 Common whiteboard usage:
@@ -173,7 +193,7 @@ twg teams get <name-or-ari>
 twg teams query --query <query>
 ```
 
-### Cross-Product & Utilities (25 commands)
+### Cross-Product & Utilities (27 commands)
 
 ```
 twg collaborators --account-id <aaid>  # Discover who collaborates most on the same work items.
@@ -183,14 +203,16 @@ twg deployments
 twg docs --since <since>  # Federated documents across Confluence + third-party…
 twg docs get --since <since>
 twg docs query --since <period> --account-id <aaid>
+twg feedback
 twg focus-areas-tree  # Show focus area hierarchy tree for a focus area
 twg meetings --since <since>
 twg meetings get --since <since>
 twg meetings query --since <period> --account-id <aaid>
+twg notifications
 twg org-tree --account-id <aaid> --depth <n>  # Show organizational hierarchy tree for a user
 twg pull-requests  # Show detailed information about a pull request including…
 twg recently-viewed --since <period>
-twg resolve  # Resolve natural-language references into Atlassian ARIs
+twg resolve --query <query>  # Resolve natural-language references into Atlassian ARIs
 twg scopes describe
 twg scopes products
 twg scopes query --keyword <keyword>
@@ -221,7 +243,7 @@ twg csm customer query
 twg jira-align projects query
 ```
 
-**Jira Service Management (JSM)** (51 total, 48 more via `twg jsm --help`)
+**Jira Service Management (JSM)** (53 total, 50 more via `twg jsm --help`)
 ```
 twg jsm incident get
 twg jsm request-type query --query-term <queryTerm> --portal-id <portalId>
@@ -247,6 +269,6 @@ twg trello card get
 twg trello workspace get
 ```
 
-*136 listed · 165 via --help.*
+*158 listed · 167 via --help.*
 
 <!-- END COMMAND REFERENCE -->

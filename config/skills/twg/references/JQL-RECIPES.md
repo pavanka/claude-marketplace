@@ -137,13 +137,22 @@ scripts/twg jira workitem query --jql 'project = PROJ AND priority = Highest AND
 
 ## Text search
 
+> ⚠️ **`text ~` requires elevated Jira permissions** and is often denied with "You do not have permission to perform the requested action." Use `summary ~` or `summary ~ ... OR description ~ ...` instead. Only fall back to `text ~` if you already know the user has full-text search access.
+
 ```bash
-# Summary contains keyword
+# PREFERRED: search summary only (works without elevated permissions)
 scripts/twg jira workitem query --jql 'project = PROJ AND summary ~ "login"'
 
-# Summary or description contains keyword
-scripts/twg jira workitem query --jql 'project = PROJ AND text ~ "authentication"'
+# PREFERRED: search summary OR description (broader, still safe)
+scripts/twg jira workitem query --jql 'project = PROJ AND (summary ~ "login" OR description ~ "login")'
+
+# ❌ AVOID: full-text search — often permission-denied
+#    scripts/twg jira workitem query --jql 'project = PROJ AND text ~ "authentication"'
 ```
+
+> **Project-scoped searches:** Always include `project = PROJ` when you know the project. Cross-project JQL (no `project =` clause) requires elevated permissions and may be denied. If you don't know the project key, use `assignee = currentUser()` or `reporter = currentUser()` instead of guessing a project key.
+
+> **Sprint functions:** `sprint in openSprints()` and `sprint in closedSprints()` require the Agile board permission. If denied, query by date instead: `updated >= -14d AND statusCategory != Done`.
 
 ## Composite examples
 

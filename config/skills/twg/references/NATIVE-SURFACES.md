@@ -20,7 +20,7 @@ Use native surfaces for product-specific detail, richer actions, and writes.
 ```bash
 # Jira
 scripts/twg jira workitem get --id PROJ-123
-scripts/twg jira workitem create --space PROJ --type Task --summary "New task" --assignee me
+scripts/twg jira workitem create --space PROJ --type Task --summary "New task" --assignee me --priority Medium
 scripts/twg jira workitem update --id PROJ-123 --summary "Updated title" --assignee me
 scripts/twg jira workitem transition --id PROJ-123 --transition-id 21
 scripts/twg jira sprint start --board-id <board-id> --id <id> --name "Sprint 42" --start-date 2026-03-01 --end-date 2026-03-14
@@ -37,6 +37,7 @@ scripts/twg confluence search query --cql 'type=page AND title ~ "Runbook"'
 
 # Bitbucket
 scripts/twg bb repo query
+scripts/twg bb repo contributors --repo-path . --range main..HEAD   # when a local checkout/path is available
 scripts/twg bb prs query
 scripts/twg bb prs get 42
 scripts/twg bb prs approve 42
@@ -58,6 +59,9 @@ scripts/twg teams get "Platform Engineering"
 
 - `--scope`
 - `--role`
+- `--repo-path`
+- `--ref`
+- `--range`
 - `--status`
 - `--name`
 - `--owner-account-id` / `--owner-name` / `--owner-email`
@@ -91,23 +95,32 @@ scripts/twg context jira workitem PROJ-123 --type repo --order-by relevance
 
 ## Gotchas
 
-- Use `confluence search query --cql ...` for structured lookup, especially when you already know a page title or want exact field filters.
-- Prefer title-oriented CQL for page lookup, for example:
+- Use `confluence search query --cql ...` for structured lookup by title or field — not for semantic/fuzzy body search.
 
 ```bash
 scripts/twg confluence search query --cql 'type=page AND title = "Runbook"'
 scripts/twg confluence search query --cql 'type=page AND title ~ "Runbook"'
 ```
 
-- Do **not** treat Confluence CQL as semantic content search. CQL is best for structured metadata filters and title matching, not meaning-based retrieval across page bodies.
-- Semantic or fuzzy page-content search is not implemented here yet, so avoid implying that CQL provides that behavior.
+## Feedback
+
+Submit product feedback directly from the CLI.
+
+```bash
+scripts/twg feedback --summary "Love the new notifications"
+scripts/twg feedback --summary "Projects command timeout" -d "Takes 30s with 500+ projects" -t bug
+scripts/twg feedback --summary "Add Slack integration" -d "Details" -t suggestion --can-contact
+```
+
+- `--summary <text>` — required short feedback title
+- `-d, --description <text>` — detailed feedback
+- `-t, --type <type>` — `bug`, `suggestion`, `comment`, `question`
+- `--can-contact` — consent to contact/research (default: false)
+
+Auto-collects: CLI version, OS, Node version, user identity from auth config.
+
+**Consent rule:** always ask the user before submitting; only add `--can-contact` if they explicitly agree.
 
 ## See also: focus-areas-tree
 
-`twg focus-areas-tree` — renders the full focus area hierarchy tree for a given focus area ARI. Use this when the user wants to see parent/child relationships in the focus area structure, not just a flat list.
-
-```bash
-twg focus-areas-tree --ari <focus-area-ari>   # Show hierarchy tree
-```
-
-Routing: `PROJECTION-SURFACES.md` for full details.
+Use `twg focus-areas-tree <ari>` (or `--name`) for parent/child hierarchy — not repeated `focus-areas get/query` calls. Key flags: `--depth`, `--up-only`, `--down-only`, `--status`, `--include-positions`. See `PROJECTION-SURFACES.md`.

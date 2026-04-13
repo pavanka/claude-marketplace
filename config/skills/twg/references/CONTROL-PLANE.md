@@ -7,11 +7,11 @@ They are mainly here so the agent can tell the user they exist when relevant, no
 
 ```bash
 scripts/twg login
+scripts/twg login --force          # Force re-entry of all tokens
 scripts/twg doctor
 scripts/twg skills install
-scripts/twg skills uninstall --target codex
-scripts/twg integrations slack manifest
-scripts/twg integrations slack start --port 3001
+scripts/twg skills install --all-agents
+scripts/twg skills uninstall
 ```
 
 ## When to mention them
@@ -20,8 +20,8 @@ scripts/twg integrations slack start --port 3001
 - Bitbucket auth missing or expired -> `scripts/twg login`
 - quick auth sanity check -> `scripts/twg doctor`
 - inspect local build metadata -> `scripts/twg doctor`
-- installing skills -> `scripts/twg skills ...`
-- Slack integration setup -> `scripts/twg integrations slack ...`
+- installing skills -> `scripts/twg skills install` (interactive agent picker)
+- installing for all agents -> `scripts/twg skills install --all-agents`
 
 ## Default behavior
 

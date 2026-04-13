@@ -21,10 +21,12 @@ scripts/twg org-tree --email "jdoe@example.com" --depth 5
 scripts/twg org-tree --include-profile-title --include-location --include-dept
 
 scripts/twg focus-areas-tree --name "Teamwork Graph" --depth 4
-scripts/twg focus-areas-tree ari:cloud:mercury::focus-area/... --include-positions
+scripts/twg focus-areas-tree --focus-area ari:cloud:mercury::focus-area/... --include-positions
+scripts/twg focus-areas-tree --focus-area ari:cloud:mercury::focus-area/... --up-only     # ancestors only
+scripts/twg focus-areas-tree --focus-area ari:cloud:mercury::focus-area/... --down-only   # subtree only
+scripts/twg focus-areas-tree --focus-area ari:cloud:mercury::focus-area/... --status on_track
 
-scripts/twg context jira workitem GI-2789   # accepts issue key directly
-scripts/twg context jira workitem --jql 'project = GI AND assignee = currentUser()'
+scripts/twg context jira workitem GI-2789   # accepts issue key directly (positional arg only — no --jql)
 scripts/twg context jira workitem GI-123 --depth 2
 scripts/twg context jira workitem GI-123 --depth 1 --include code,docs
 

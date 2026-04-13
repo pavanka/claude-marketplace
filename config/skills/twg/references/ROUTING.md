@@ -14,7 +14,7 @@ Use this guide to pick the right surface first.
 Prefer `jira` for overlapping issue-centric nouns, even when the project is a JSM project.
 
 - Use `jira` for: `workitem`, `space`, `board`, `dashboard`, `field`, `sprint`, `filter`
-- Use `jsm` for: portals, request types, queues, help-center content, knowledge resources, and JSM ops incident/service flows
+- Use `jsm` for: portals, request types, queues, help-center content, knowledge resources, and service/incident/service-tier lookups
 
 If the user says "JSM ticket" but wants the underlying issue record, comments, transitions, or status, route to Jira:
 
@@ -45,19 +45,23 @@ scripts/twg docs get <id-or-ari>
 ## Typical pivots
 
 ```bash
-# Cross-product docs -> native Confluence details
-scripts/twg docs query --since 14d
+scripts/twg docs query --since 14d                              # federated → pivot to native:
 scripts/twg confluence page get 12345 --body-format adf
 
-# Issue perimeter -> native Jira details
-scripts/twg context jira workitem PROJ-123 --depth 2
+scripts/twg context jira workitem PROJ-123 --type repo          # perimeter → native detail:
 scripts/twg jira workitem get --id PROJ-123
 
-# JSM intake/config -> JSM native detail
-scripts/twg jsm request-type query --site <site> --query-term "password"
-scripts/twg jsm service query --site <site>
-
-# Ranked linked content (for agent enrichment)
-scripts/twg context jira workitem PROJ-123 --type repo --order-by relevance
-scripts/twg context jira workitem PROJ-123 --fast --site mycompany
+scripts/twg jsm request-type query --query-term "password"      # JSM intake/config
+scripts/twg context jira workitem PROJ-123 --fast               # quick structured context
 ```
+
+## Bitbucket repo contributor ranking
+
+When the user asks who contributed most to a repository and a local checkout or explicit repo path is available, use the direct leaf command rather than composing `git shortlog` probes:
+
+```bash
+scripts/twg bb repo contributors --repo-path <path> --range main..HEAD
+scripts/twg bb repo contributors --repo-path <path> --ref HEAD
+```
+
+If the question is about a remote repository and no local checkout is available yet, do not route here by default. Stay on the normal Bitbucket repo/PR surfaces until you have a checkout path to inspect.
